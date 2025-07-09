@@ -8,54 +8,59 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { USER_LOGO } from "../utils/const";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSignIn, setIsSignIn] = useState(true);
+  const navigate = useNavigate();
   const email = useRef(null);
   const password = useRef(null);
+  const userName = useRef(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate(null);
 
   const handleOnClick = () => {
-    const isValid = validateForm(email.current.value, password.current.value);
-    if (isValid) {
-      setErrorMessage(isValid);
-      return;
-    }
+    const message = validateForm(email.current.value, password.current.value);
+    setErrorMessage(message);
+    if (message) return;
+
     if (!isSignIn) {
+      // Sign Up Logic
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
         password.current.value
       )
         .then((userCredential) => {
-          // Signed up
           const user = userCredential.user;
-          console.log("Sign up complete");
-          console.log(user);
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
+          updateProfile(user, {
+            displayName: userName.current.value,
+            photoURL: USER_LOGO,
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
             })
-          );
-
-          // ...
-        })
-        .then(() => {
-          navigate("/browse");
+            .catch((error) => {
+              setErrorMessage(error.message);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + " " + errorMessage);
-          // ..
+          setErrorMessage(errorCode + "-" + errorMessage);
         });
     } else {
+      // Sign In Logic
       signInWithEmailAndPassword(
         auth,
         email.current.value,
@@ -64,34 +69,11 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          // console.log("LoginIn");
-          // console.log(user);
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
-            })
-          );
-        })
-        .then(() => {
-          updateProfile(auth.currentUser, {
-            displayName: "Jane Q. User",
-            photoURL: "https://example.com/jane-q-user/profile.jpg",
-          })
-            .then(() => {
-              // Profile updated!
-              // ...
-            })
-            .catch((error) => {
-              // An error occurred
-              // ...
-            });
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + " " + errorMessage);
+          setErrorMessage(errorCode + "-" + errorMessage);
         });
     }
   };
@@ -164,6 +146,7 @@ const Login = () => {
             {!isSignIn && (
               <input
                 type="text"
+                ref={userName}
                 placeholder="Full Name"
                 style={{
                   width: "100%",
