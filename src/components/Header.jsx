@@ -14,7 +14,7 @@ const Header = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
+        // console.log(user);
 
         const { uid, email, displayName, photoURL } = user;
         dispatch(
@@ -59,7 +59,7 @@ const Header = () => {
         padding: "20px 40px",
         background:
           "linear-gradient(180deg, rgba(0, 0, 0, 0.7) 10%, transparent)",
-        zIndex: "10",
+        zIndex: "1000",
         boxSizing: "border-box",
       }}
     >
