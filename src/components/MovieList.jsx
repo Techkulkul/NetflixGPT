@@ -16,8 +16,8 @@ const MovieList = ({ title, videoData }) => {
       </h1>
       {videoData && (
         <div style={{ display: "flex" }}>
-          {videoData.map((video) => (
-            <VideoCard poster_path={video.poster_path} />
+          {videoData.map((video, index) => (
+            <VideoCard key={index} poster_path={video.poster_path} />
           ))}
         </div>
       )}

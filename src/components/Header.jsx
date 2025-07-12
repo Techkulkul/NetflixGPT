@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { USER_LOGO } from "../utils/const";
+import { toggleIsShowGPTSearchPage } from "../utils/gptSlice";
 
 const Header = () => {
   const user = useSelector((store) => store.user);
+  const isShowGPTPage = useSelector((store) => store.gpt.isShowGPTSearchPage);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -44,6 +47,10 @@ const Header = () => {
       .catch((error) => {
         // An error happened.
       });
+  };
+
+  const handleGPTSearchButton = () => {
+    dispatch(toggleIsShowGPTSearchPage());
   };
 
   return (
@@ -95,6 +102,28 @@ const Header = () => {
               gap: "15px",
             }}
           >
+            <button
+              style={{
+                backgroundColor: "#3452eb",
+                color: "white",
+                border: "none",
+                padding: "8px 16px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: "500",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = "#34a5eb";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = "#3452eb";
+              }}
+              onClick={handleGPTSearchButton}
+            >
+              {isShowGPTPage ? "Home Page" : "GPT search"}
+            </button>
             <img
               alt="user-logo"
               style={{
