@@ -1,7 +1,6 @@
-import React, { useRef, useState } from "react";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GoogleGenAI } from "@google/genai";
-import ai from "../utils/openai";
+import ai from "../utils/geminiapi";
 import { MOVIES_OPTIONS } from "../utils/const";
 import MovieList from "./MovieList";
 import { addSearchMovieResult } from "../utils/gptSlice";
@@ -32,9 +31,17 @@ const GptSearchPage = () => {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: gptQuery,
+        config: {
+          thinkingConfig: {
+            thinkingBudget: 0,
+            // Turn off thinking:
+            // thinkingBudget: 0
+            // Turn on dynamic thinking:
+            // thinkingBudget: -1
+          },
+        },
       });
       const searchResult = response.text;
-      console.log(searchResult);
       const splitData = searchResult.split(",");
 
       const data = splitData.map((video) => getSearchMovieData(video));
@@ -71,7 +78,7 @@ const GptSearchPage = () => {
       >
         <img
           style={{
-            position: "absolute",
+            position: "fixed",
             top: "0",
             left: "0",
             width: "100%",
@@ -116,7 +123,7 @@ const GptSearchPage = () => {
           Search
         </button>
       </div>
-      <div>
+      <div style={{}}>
         {searchMovieResult &&
           searchMovieResult.map((item, index) => (
             <MovieList title={searchMovie[index]} videoData={item} />

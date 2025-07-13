@@ -1,8 +1,4 @@
-import React from "react";
-
 const VideoCard = ({ poster_path }) => {
-  //   if (!nowPlayingmovies) return;
-  //   console.log(nowPlayingmovies);
   if (!poster_path) return null;
 
   return (

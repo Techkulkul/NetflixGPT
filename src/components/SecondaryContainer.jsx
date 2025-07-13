@@ -1,4 +1,3 @@
-import React from "react";
 import MovieList from "./MovieList";
 import { useSelector } from "react-redux";
 import usePopular from "../hooks/usePopular";
@@ -15,7 +14,6 @@ const SecondaryContainer = () => {
   const upComingMovies = useSelector((store) => store.movies.upcomingMovies);
 
   if (nowPlayingmovie === null) return;
-  // console.log(nowPlayingmovie);
 
   return (
     <div

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MOVIES_OPTIONS } from "../utils/const";
 
 const BackgroundVideo = ({ videoId }) => {
@@ -11,7 +11,6 @@ const BackgroundVideo = ({ videoId }) => {
       MOVIES_OPTIONS
     );
     const json = await videoData.json();
-    // console.log(json.results);
 
     const filterVideo = json.results.filter(
       (video) => video.type === "Trailer"

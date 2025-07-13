@@ -1,10 +1,6 @@
-// import React, { useEffect } from "react";
-import { MOVIES_OPTIONS } from "../utils/const";
-import { useDispatch, useSelector } from "react-redux";
-// import { addNowPlayingMovie } from "../utils/moviesSlice";
+import { useSelector } from "react-redux";
 import VideoTitle from "./VideoTitle";
 import BackgroundVideo from "./BackgroundVideo";
-import useMovieList from "../hooks/useNowPlayingMovie";
 import useNowPlayingMovie from "../hooks/useNowPlayingMovie";
 
 const MainContainer = () => {
